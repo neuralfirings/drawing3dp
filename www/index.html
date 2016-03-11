@@ -1,0 +1,133 @@
+<html>
+  <head>      
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Drawing</title>
+   
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.min.js"></script>
+    <script src="FileSaver.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+      // Set wait time
+      setInterval(function() {
+        $.ajax({
+          url: "http://www.nyl.io/drawing/wait.json",
+          success: function(data) {
+            wait_time=data.wait; // how many png are on the computer * 10 min
+            $.ajax({
+              url: "http://www.nyl.io/drawing/print.json",
+              success: function(data) {
+                print_done=data.print;
+                print_time = Math.max(0, Math.round((print_done-Math.floor(Date.now() / 1000))/60)) // minutes until printer is free
+                total_time = wait_time+print_time+10 // queue + print time + time to print your thing
+                total_hrs = Math.floor(total_time/60)
+                total_min = total_time%60
+                $("#wait").text("current wait time: " + total_hrs + " hr, " + total_min + " min")
+              }
+            })
+          }
+        })
+      }, 1000)
+
+      // Drawing 
+      var canvas = new fabric.Canvas('c', {
+        isDrawingMode: true
+      });
+      canvas.setBackgroundColor('rgba(255, 255, 255, 1)', canvas.renderAll.bind(canvas));
+      canvas.freeDrawingBrush.width=20
+
+      canvas.on("mouse:up", function(){ drawLoop(); });
+
+      function drawLoop() {
+        var circle = new fabric.Circle({
+          radius: 40, fill: 'black', left: 0, top: 160
+        });
+        var hole = new fabric.Circle({
+          radius: 20, fill: 'white', left: 20, top: 180
+        });
+        canvas.add(circle)
+        canvas.add(hole)
+      }
+
+      $("#draw").click(function() {
+        canvas.freeDrawingBrush.color="black"
+        $(this).addClass("disabled")
+        $("#erase").removeClass('disabled')
+      })
+      $("#erase").click(function() {
+        canvas.freeDrawingBrush.color="white"
+        $(this).addClass("disabled")
+        $("#draw").removeClass('disabled')
+      })
+
+      // Explort
+      $("#export").click(function() {
+        if ($("#alias").val() == "") {
+          $("#alias").addClass("bg-warning")
+          $(".alertarea").show()
+        }
+        else {
+          canvas = document.getElementById("c");
+          dataURL = canvas.toDataURL("image/png");
+          // document.write('<img src="'+dataURL+'"/>');
+          var data = atob( dataURL.substring( "data:image/png;base64,".length ) ), asArray = new Uint8Array(data.length);
+          for( var i = 0, len = data.length; i < len; ++i ) {
+            asArray[i] = data.charCodeAt(i);    
+          }
+          var blob = new Blob( [ asArray.buffer ], {type: "image/png"} );
+          saveAs(blob, Math.floor(Date.now() / 1000) + "_" + $("#alias").val() + ".png");
+        }
+
+      })
+
+      // Clear/reload
+      $("#reload").click(function() {
+        location.reload();
+      })
+
+      // init
+      drawLoop()
+      $("#draw").click();
+    })
+    </script>
+  </head>
+  <body>
+    <div style="width: 1426px">
+      <div class="row alertarea" style="margin: 10px; display:none">
+        <div class="" style="width: 830px; margin-left: 400px">
+          <div class="alert alert-danger" role="alert">No alias entered</div>
+        </div>
+      </div>
+
+      <div style="margin: 10px;">
+        <div style="float: left; ">
+          <h1 id="wait" style="margin-top: 0px; margin-left: 30px">&nbsp;</h1>
+          <img src="keychain.png" style="margin-top: 10px; width: 640px;"/>
+        </div>
+        <div style="float: left; margin-left: -60px;">
+          <!-- YOUR HTML BODY GOES HERE -->
+          <button id="draw" class="btn btn-primary col-md-1" style="margin-right: 5px">Draw</button>
+          <button id="erase" class="btn btn-primary col-md-1" style="margin-right: 5px">Erase</button>
+          <button id="reload" class="btn btn-primary col-md-1" style="margin-right: 5px">Clear</button>
+          <div class="col-md-3">
+            <input type="text" class="form-control " id="alias" placeholder="Amazon alias (ex: nyl)">
+          </div>
+          <button id="export" class="btn btn-primary col-md-2">Export</button>
+          <br />  <br />
+          <canvas id="c" width="800px" height="400px" style="border: solid 1px"></canvas>
+   
+          <img src="ruler.png" style="width: 828px; margin-left: -2px;"/>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+    </div>
+  </body>
+</html>

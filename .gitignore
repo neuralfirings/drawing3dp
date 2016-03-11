@@ -1,0 +1,12 @@
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/tmp
+
+# Other
+.DS_Store
+/**/.DS_Store
+/gitignore
+
+# Batches
+BATCH*
+done
