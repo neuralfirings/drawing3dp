@@ -1,14 +1,14 @@
-# Drawing/3DP Demo
+# Drawing 3DP Demo
 
 ## Instructions for running
 
-start `./wait.sh` in Terminal. This will update the time keeper with how many files are waiting for print. 
+1. start `./wait.sh` in Terminal. This will update the time keeper with how many files are waiting for print. 
 
-load `http://www.nyl.io/drawing` on Surface
+2, load `http://www.nyl.io/drawing` on Surface
 
-save drawings into batch folders (~6/batch)
+3. save drawings into batch folders (~6/batch)
 
-when folder is full, print and update time
+4. when folder is full, print and update time
 - Run `./pop.sh FOLDER` in Terminal 
 - Load `done > FOLDER > exports` files into CURA
 - generate GCode
