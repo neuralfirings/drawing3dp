@@ -5,8 +5,16 @@ argv = sys.argv
 argv = argv[argv.index("--") + 1:]  # get all args after "--"
 filename=argv[0] #"nyl"
 filepath=argv[1]
-filepath=filepath.replace("/", "//")
-filepath=filepath + "//" + filename
+os=argv[4]
+if os=="win":
+    # filepath=filepath.replace("\", '\\\')
+    print("WINDOW!!!")
+    slash=""
+    print(filepath+slash+filename)
+else:
+    filepath=filepath.replace("/", "//")
+    slash="//"
+filepath=filepath + slash + filename
 width=float(argv[2]) #"nyl"
 extrude=float(argv[3]) #"nyl"
 
@@ -14,9 +22,9 @@ extrude=float(argv[3]) #"nyl"
 # filepath="//Users//nyl//git_projects//simplepopper//" + filename
 target_dimension_x = width
 
-bpy.ops.import_curve.svg(filepath=filepath+"//"+filename+".svg")
+bpy.ops.import_curve.svg(filepath=filepath+slash+filename+".svg")
 curve_name = bpy.data.objects[0].name
-bpy.context.scene.objects.active=bpy.data.objects[curve_name] 
+bpy.context.scene.objects.active=bpy.data.objects[curve_name]
 bpy.data.objects[curve_name].select=True
 bpy.ops.object.select_all(action='SELECT')
 bpy.ops.object.join()
@@ -35,4 +43,4 @@ bpy.ops.object.mode_set(mode='OBJECT')
 bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
 
 
-bpy.ops.export_mesh.stl(filepath=filepath+"//"+filename+".stl", check_existing=True, axis_forward='Y', axis_up='Z', filter_glob="*.stl", global_scale=1, use_scene_unit=False, ascii=False, use_mesh_modifiers=True)
+bpy.ops.export_mesh.stl(filepath=filepath+slash+filename+".stl", check_existing=True, axis_forward='Y', axis_up='Z', filter_glob="*.stl", global_scale=1, use_scene_unit=False, ascii=False, use_mesh_modifiers=True)

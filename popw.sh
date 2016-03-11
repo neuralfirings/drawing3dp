@@ -12,19 +12,20 @@ do
   fname="${fname%.*}"
   echo "Popping: " $fname
   dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+  dir='C:\Users\nancy\Dropbox\MakerProjects\drawing\'
   # echo $dir
   mkdir $fname
   cp $fname.png $fname/$fname.png
   cd $fname
   convert $fname.png $fname.bmp
   potrace -s $fname.bmp
-  /Applications/3D/Blender2.76b/blender.app/Contents/MacOS/blender -b -P /Users/nyl/Dropbox/MakerProjects/drawing/svg2stl.py -- $fname $dir 75 1.89 mac
+  '/cygdrive/c/Program Files (x86)/Blender/blender' -b -P 'C:\Users\nancy\Dropbox\MakerProjects\drawing\svg2stl.py' -- $fname $dir 75 1.89 win
   cd ..
   mv $fname/$fname.stl exports/$fname.stl
 done
 
 cd ..
-mv $1 done/$1
+# mv $1 done/$1
 
 echo "===============END "$1"================="
 
