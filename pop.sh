@@ -1,8 +1,11 @@
 #!/bin/bash
 
-echo "================BEGIN "$1"================"
+echo "================BEGIN BATCH "$1"================"
 
-cd $1
+currbatch="batch"$1
+nextbatch_id=`expr $1 + 1`
+cd Waiting
+cd $currbatch
 mkdir exports
 
 for f in *.png
@@ -24,9 +27,11 @@ do
 done
 
 cd ..
-mv $1 done/$1
+mkdir "batch"$nextbatch_id
+cd ..
+mv waiting/$currbatch done/$currbatch
 
-echo "===============END "$1"================="
+echo "===============END BATCH "$1"================="
 
 #mkdir $1
 #cp $1.png $1/$1.png

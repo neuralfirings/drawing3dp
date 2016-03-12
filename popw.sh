@@ -1,33 +1,37 @@
 #!/bin/bash
 
-echo "================BEGIN "$1"================"
+echo $1
+next=`expr $1 + 1`
+echo $next
 
-cd $1
-mkdir exports
+# echo "================BEGIN "$1"================"
 
-for f in *.png
-do
-  echo "---------------------------------------------"
-  fname="${f##*/%.*}"
-  fname="${fname%.*}"
-  echo "Popping: " $fname
-  dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-  dir='C:\Users\nancy\Dropbox\MakerProjects\drawing\'
-  # echo $dir
-  mkdir $fname
-  cp $fname.png $fname/$fname.png
-  cd $fname
-  convert $fname.png $fname.bmp
-  potrace -s $fname.bmp
-  '/cygdrive/c/Program Files (x86)/Blender/blender' -b -P 'C:\Users\nancy\Dropbox\MakerProjects\drawing\svg2stl.py' -- $fname $dir 75 1.89 win
-  cd ..
-  mv $fname/$fname.stl exports/$fname.stl
-done
+# cd $1
+# mkdir exports
 
-cd ..
-# mv $1 done/$1
+# for f in *.png
+# do
+#   echo "---------------------------------------------"
+#   fname="${f##*/%.*}"
+#   fname="${fname%.*}"
+#   echo "Popping: " $fname
+#   dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#   dir='C:\Users\nancy\Dropbox\MakerProjects\drawing\'
+#   # echo $dir
+#   mkdir $fname
+#   cp $fname.png $fname/$fname.png
+#   cd $fname
+#   convert $fname.png $fname.bmp
+#   potrace -s $fname.bmp
+#   '/cygdrive/c/Program Files (x86)/Blender/blender' -b -P 'C:\Users\nancy\Dropbox\MakerProjects\drawing\svg2stl.py' -- $fname $dir 75 1.89 win
+#   cd ..
+#   mv $fname/$fname.stl exports/$fname.stl
+# done
 
-echo "===============END "$1"================="
+# cd ..
+# # mv $1 done/$1
+
+# echo "===============END "$1"================="
 
 #mkdir $1
 #cp $1.png $1/$1.png

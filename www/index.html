@@ -26,6 +26,7 @@
               url: "http://www.nyl.io/drawing/print.json",
               success: function(data) {
                 print_done=data.print;
+                console.log(print_done, wait_time)
                 print_time = Math.max(0, Math.round((print_done-Math.floor(Date.now() / 1000))/60)) // minutes until printer is free
                 total_time = wait_time+print_time+10 // queue + print time + time to print your thing
                 total_hrs = Math.floor(total_time/60)
